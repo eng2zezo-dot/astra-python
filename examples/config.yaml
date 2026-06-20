@@ -1,0 +1,106 @@
+"""Example configuration file for Astra Headend (YAML format)."""
+
+# System settings
+system:
+  log_level: INFO
+  log_file: logs/astra.log
+  api_host: 0.0.0.0
+  api_port: 5000
+
+# Channels configuration
+channels:
+  BBC_ONE:
+    service_id: 4101
+    video_pid: 0x0100
+    audio_pids:
+      - 0x0101
+      - 0x0102
+    pmt_pid: 0x0110
+    enabled: true
+    scrambled: false
+  
+  BBC_TWO:
+    service_id: 4102
+    video_pid: 0x0200
+    audio_pids:
+      - 0x0201
+    pmt_pid: 0x0210
+    enabled: true
+    scrambled: false
+  
+  BBC_THREE:
+    service_id: 4103
+    video_pid: 0x0300
+    audio_pids:
+      - 0x0301
+    pmt_pid: 0x0310
+    enabled: true
+    scrambled: false
+
+# Input sources
+inputs:
+  SATELLITE_INPUT:
+    type: dvb-s
+    uri: dvb://adapter0
+    adapter: 0
+    frequency: 11462000
+    symbol_rate: 22000000
+    modulation: QPSK
+    fec: "5/6"
+    enabled: true
+  
+  BACKUP_SATELLITE:
+    type: dvb-s
+    uri: dvb://adapter1
+    adapter: 1
+    frequency: 11462000
+    symbol_rate: 22000000
+    modulation: QPSK
+    fec: "5/6"
+    enabled: true
+  
+  IPTV_INPUT:
+    type: iptv
+    uri: udp://239.1.1.1:5000
+    enabled: true
+
+# Output targets
+outputs:
+  UDP_MULTICAST:
+    type: udp
+    uri: udp://239.1.1.100:5000
+    channels:
+      - BBC_ONE
+      - BBC_TWO
+      - BBC_THREE
+    enabled: true
+  
+  HTTP_STREAMING:
+    type: http
+    uri: http://0.0.0.0:8000
+    channels:
+      - BBC_ONE
+      - BBC_TWO
+    enabled: true
+  
+  HLS_OUTPUT:
+    type: hls
+    uri: file:///var/www/hls
+    channels:
+      - BBC_ONE
+    enabled: true
+
+# Monitoring settings
+monitoring:
+  enabled: true
+  check_interval: 5
+  alarms_enabled: true
+
+# Failover settings
+failover:
+  enabled: true
+  check_interval: 10
+  sources:
+    - name: SATELLITE_PRIMARY
+      primary: dvb://adapter0
+      backup: dvb://adapter1
