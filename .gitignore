@@ -31,10 +31,6 @@ PIPFILE.lock
 *.manifest
 *.spec
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -134,7 +130,9 @@ dmypy.json
 Thumbs.db
 
 # Project specific
-config/local*.yaml
 logs/
-data/
-cache/
+config*.yaml
+config*.json
+*.ts
+output/
+hls/
